@@ -97,7 +97,7 @@ jobs:
                                 "color": {
                                   "red": 1,
                                   "green": 0,
-                                },
+                                }
                                 "type": "FILLED",
                                 "onClick": {
                                   "openLink": {
