@@ -81,7 +81,7 @@ jobs:
                       "widgets": [
                         {
                           "textParagraph": {
-                            "text": "<b><font color="#$color">${{ steps.build-packer.outcome }}</font> "
+                            "text": "<font color='#2ecc71'>[ ${{ steps.build-packer.outcome }} ]</font>"
                           },
                         {
                           "textParagraph": {
