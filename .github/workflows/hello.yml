@@ -59,10 +59,10 @@ jobs:
         if: always()
         run: |
           # State output
-          if [ "${{ steps.build-packer.outcome }}" == "succes ]; then
-              state='<font color=#2ecc71><b>[ Success ]</b></font>'
+          if [ "${{ steps.build-packer.outcome }}" == "succes" ]; then
+              color=2ecc71
           else
-              state='<font color=#e74c3c><b>[ Failed ]</b></font>'
+              color=e74c3c
           fi
           
           # Payload JSON de la card
@@ -73,7 +73,7 @@ jobs:
                 "cardId": "build-notification",
                 "card": {
                   "header": {
-                    "title": "Notification Build custom image - <b>#${{github.run_number}}</b> $state",
+                    "title": "Notification Build custom image - <b>#${{github.run_number}}</b> <font color=\"#$color\"><b>${{ steps.build-packer.outcome }}</b></font>",
                     "subtitle": "Acteur : <b>${{ github.actor }}</b>"
                   },
                   "sections": [
