@@ -73,12 +73,16 @@ jobs:
                 "cardId": "build-notification",
                 "card": {
                   "header": {
-                    "title": "Notification Build custom image - <b>#${{github.run_number}}</b> <font color='#FF0000'>Texte en rouge</font> <font color=\"#$color\"><b>${{ steps.build-packer.outcome }}</b></font>",
-                    "subtitle": "<font color='#FF0000'>Texte en rouge</font> Acteur : <b>${{ github.actor }}</b>"
+                    "title": "Notification Build custom image - <b>#${{github.run_number}}</b>",
+                    "subtitle": "Acteur : <b>${{ github.actor }}</b>"
                   },
                   "sections": [
                     {
                       "widgets": [
+                        {
+                          "textParagraph": {
+                            "text": "<b><font color="#$color">${{ steps.build-packer.outcome }}</font> "
+                          },
                         {
                           "textParagraph": {
                             "text": "Image : <b>${{ env.image }}</b> \n Source : <b>${{ github.event.inputs.source_image_family }}</b> \n Destination <b>${{ github.event.inputs.project_id }}</b> <font color='#FF0000'>Texte en rouge</font> "
