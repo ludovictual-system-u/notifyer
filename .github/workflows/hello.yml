@@ -1,0 +1,113 @@
+name: Build Custom Image
+
+permissions:
+  contents: 'read'
+  id-token: 'write'
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_id:
+        description: 'Project ID GCP Client'
+        required: true
+        type: string
+        default: 'tec-iaasint-s-ws49' 
+      source_image_family:
+        description: 'Type of IaaS base image'
+        required: true
+        type: choice
+        options:
+          - iaas-windows-2022
+          - iaas-rhel-8
+          - iaas-rhel-9
+      result_image_family:
+        description: 'Custom name [customized]-iaas-rhel-9-yyyymmdd-hhmm'
+        default: "customized"
+        required: true
+        type: string
+      customer_image_family_name:
+        description: 'Put the name of the image family in project'
+        default: "custom"
+        required: true
+        type: string
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+    
+      - name: variables environnements
+        run: |
+           echo "build_project=tec-iaas-g-zaft" >> "$GITHUB_ENV"
+           echo "satf=sa-buildimage-custom@tec-iaas-g-zaft.iam.gserviceaccount.com" >> "$GITHUB_ENV"
+           echo "wif_id=506603449477" >> "$GITHUB_ENV"
+           echo "network=projects/host-project-vpc-275610/global/networks/hub" >> "$GITHUB_ENV"
+           echo "subnetwork=projects/host-project-vpc-275610/regions/europe-west9/subnetworks/tec-landing-g-sb-vm" >> "$GITHUB_ENV"
+           echo "no password" > ~/.vault_password.txt
+           echo "source_image_project_id=tec-irisimages-g-tq7i" >> "$GITHUB_ENV"
+           echo "image=ludovic-iaas-rhel-8-20250527-0956" >> "$GITHUB_ENV"
+  
+      - name: Build image
+        id: build-packer
+        run: |
+            "echo i build"
+             exit 1
+ 
+      - name: Notify Gchat ${{ github.actor }}
+        if: always()
+        run: |
+          # Payload JSON de la carte
+          PAYLOAD=$(cat <<EOF
+          {
+            "cardsV2": [
+              {
+                "cardId": "build-notification",
+                "card": {
+                  "header": {
+                    "title": "Notification Build custom image - <b>#${{github.run_number}}</b> has ${{ steps.build-packer.outcome }}",
+                    "subtitle": "Acteur : <b>${{ github.actor }}</b>"
+                  },
+                  "sections": [
+                    {
+                      "widgets": [
+                        {
+                          "textParagraph": {
+                            "text": "Image : <b>${{ env.image }}</b> \n Source : <b>${{ github.event.inputs.source_image_family }}</b> \n Destination <b>${{ github.event.inputs.project_id }}</b>"
+                          }
+                        },
+                        {
+                          "buttonList": {
+                            "buttons": [
+                              {
+                                "text": "VOIR LE LOG",
+                                "onClick": {
+                                  "openLink": {
+                                    "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                                  }
+                                }
+                              },
+                              {
+                                "text": "VOIR L'IMAGE",
+                                "onClick": {
+                                  "openLink": {
+                                    "url": "https://console.cloud.google.com/compute/imagesDetail/projects/${{ github.run_id }}/global/images/${{ env.image }}"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+          EOF
+          )
+
+
+          curl -X POST -H "Content-Type: application/json" -d "$PAYLOAD" "https://chat.googleapis.com/v1/spaces/AAAArBXr4Rs/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=fEbnLYH1jHbaj6YhKBdxpuUDKWn14yKsI33BEJpgH5k"
