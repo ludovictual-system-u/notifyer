@@ -81,11 +81,7 @@ jobs:
                       "widgets": [
                         {
                           "textParagraph": {
-                            "text": "<font color='#2ecc71'>[ ${{ steps.build-packer.outcome }} ]</font>"
-                          },
-                        {
-                          "textParagraph": {
-                            "text": "Image : <b>${{ env.image }}</b> \n Source : <b>${{ github.event.inputs.source_image_family }}</b> \n Destination <b>${{ github.event.inputs.project_id }}</b> <font color='#FF0000'>Texte en rouge</font> "
+                            "text": " <b><font color='#FF0000'>${{ steps.build-packer.outcome }}</font></b> \n Image : <b>${{ env.image }}</b> \n Source : <b>${{ github.event.inputs.source_image_family }}</b> \n Destination <b>${{ github.event.inputs.project_id }}</b>"
                           }
                         },
                         {
