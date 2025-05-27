@@ -52,7 +52,7 @@ jobs:
       - name: Build image
         id: build-packer
         run: |
-            "echo i build"
+            echo "build"
           #  exit 1
  
       - name: Notify Gchat ${{ github.actor }}
