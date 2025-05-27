@@ -1,4 +1,4 @@
-name: Build Custom Image
+name: notifyer
 
 permissions:
   contents: 'read'
@@ -58,7 +58,14 @@ jobs:
       - name: Notify Gchat ${{ github.actor }}
         if: always()
         run: |
-          # Payload JSON de la carte
+          # State output
+          if [ "${{ steps.build-packer.outcome }}" == "succes ]; then
+              state="<font color=\"#2ecc71\"><b>[ Success ]</b></font>"
+          else
+              state="<font color=\"#e74c3c\"><b>[ Failed ]</b></font>"
+          fi
+          
+          # Payload JSON de la card
           PAYLOAD=$(cat <<EOF
           {
             "cardsV2": [
@@ -66,7 +73,7 @@ jobs:
                 "cardId": "build-notification",
                 "card": {
                   "header": {
-                    "title": "Notification Build custom image - <b>#${{github.run_number}}</b> has ${{ steps.build-packer.outcome }}",
+                    "title": "Notification Build custom image - <b>#${{github.run_number}}</b> $state",
                     "subtitle": "Acteur : <b>${{ github.actor }}</b>"
                   },
                   "sections": [
