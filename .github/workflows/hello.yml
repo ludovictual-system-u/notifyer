@@ -53,7 +53,7 @@ jobs:
         id: build-packer
         run: |
             "echo i build"
-             exit 1
+          #  exit 1
  
       - name: Notify Gchat ${{ github.actor }}
         if: always()
