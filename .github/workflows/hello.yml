@@ -60,9 +60,9 @@ jobs:
         run: |
           # State output
           if [ "${{ steps.build-packer.outcome }}" == "succes ]; then
-              state="<font color=#2ecc71><b>[ Success ]</b></font>"
+              state='<font color=#2ecc71><b>[ Success ]</b></font>'
           else
-              state="<font color=#e74c3c><b>[ Failed ]</b></font>"
+              state='<font color=#e74c3c><b>[ Failed ]</b></font>'
           fi
           
           # Payload JSON de la card
